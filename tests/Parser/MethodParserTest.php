@@ -1,8 +1,8 @@
 <?php
 
-namespace VerbalExpressions\Test\PHPVerbalExpressions\Parser;
+namespace UWebPro\Test\PHPVerbalExpressions\Parser;
 
-use VerbalExpressions\PHPVerbalExpressions\Parser\MethodParser;
+use UWebPro\PHPVerbalExpressions\Parser\MethodParser;
 use PHPUnit\Framework\TestCase;
 
 /**

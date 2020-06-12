@@ -1,6 +1,6 @@
 <?php
 
-namespace VerbalExpressions\PHPVerbalExpressions\Parser;
+namespace UWebPro\PHPVerbalExpressions\Parser;
 
 /**
  * MethodParser.
