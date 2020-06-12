@@ -1,5 +1,5 @@
 {
-    "name": "uwebpro/php-verbal-expressions",
+    "name": "uwebpro/regex-builder",
     "type": "library",
     "description": "PHP Regular expressions made easy",
     "require": {
