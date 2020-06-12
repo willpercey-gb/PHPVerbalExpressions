@@ -1,190 +1,97 @@
 <?php
 
-namespace VerbalExpressions\PHPVerbalExpressions;
+namespace UWebPro\PHPVerbalExpressions;
+
+use UWebPro\PHPVerbalExpressions\Validation\MustInclude;
 
 /**
- * Verbal Expressions v0.1 (https://github.com/jehna/VerbalExpressions) ported in PHP
- * @author Mihai Ionut Vilcu (ionutvmi@gmail.com)
- * 22.July.2013
+ * Class VerbalExpressions
+ * @package VerbalExpressions\PHPVerbalExpressions
  */
-
 class VerbalExpressions
 {
-    public $prefixes     = '';
-    public $source       = '';
-    public $suffixes     = '';
-    public $modifiers    = 'm'; // default to global multi line matching
+    public $prefixes = '';
+    public $source = '';
+    public $suffixes = '';
+    public $modifiers = 'm'; // default to global multi line matching
     public $replaceLimit = 1;   // the limit of preg_replace when g modifier is not set
     protected $lastAdded = false; // holds the last added regex
+    private $mustInclude;
 
-    /**
-     * Sanitize
-     *
-     * Sanitation function for adding anything safely to the expression
-     *
-     * @access public
-     * @param  string $value the to be added
-     * @return string escaped value
-     */
-    public static function sanitize($value)
+    public function __construct()
+    {
+        $this->mustInclude = (new MustInclude($this));
+    }
+
+    public function mustInclude(): MustInclude
+    {
+        return $this->mustInclude;
+    }
+
+    public static function sanitize($value): string
     {
         return $value ? preg_quote($value, '/') : $value;
     }
 
-    /**
-     * Add
-     *
-     * Add stuff to the expression
-     *
-     * @access public
-     * @param  string $value the stuff to be added
-     * @return VerbalExpressions
-     */
-    public function add($value)
+
+    public function add(string $value): VerbalExpressions
     {
         $this->source .= $this->lastAdded = $value;
 
         return $this;
     }
 
-    /**
-     * Start of Line
-     *
-     * Mark the expression to start at the beginning of the line.
-     *
-     * @access public
-     * @param  boolean $enable Enables or disables the line starting. Default value: true
-     * @return VerbalExpressions
-     */
-    public function startOfLine($enable = true)
+
+    public function startOfLine($enable = true): VerbalExpressions
     {
         $this->prefixes = $enable ? '^' : '';
 
         return $this;
     }
 
-    /**
-     * End of line
-     *
-     * Mark the expression to end at the last character of the line.
-     *
-     * @access public
-     * @param  boolean $enable Enables or disables the line ending. Default value: true
-     * @return VerbalExpressions
-     */
-    public function endOfLine($enable = true)
+    public function endOfLine($enable = true): VerbalExpressions
     {
         $this->suffixes = $enable ? '$' : '';
 
         return $this;
     }
 
-    /**
-     * Then
-     *
-     * Add a string to the expression
-     *
-     * @access public
-     * @param  string $value The string to be looked for
-     * @return VerbalExpressions
-     */
-    public function then($value)
+    public function then($value): VerbalExpressions
     {
         return $this->add('(?:' . self::sanitize($value) . ')');
     }
 
-    /**
-     * Find
-     *
-     * Alias for then()
-     *
-     * @access public
-     * @param  string $value The string to be looked for
-     * @return VerbalExpressions
-     */
-    public function find($value)
+    public function find($value): VerbalExpressions
     {
         return $this->then($value);
     }
 
-    /**
-     * Maybe
-     *
-     * Add a string to the expression that might appear once (or not).
-     *
-     * @access public
-     * @param  string $value The string to be looked for
-     * @return VerbalExpressions
-     */
-    public function maybe($value)
+
+    public function maybe($value): VerbalExpressions
     {
         return $this->add('(?:' . self::sanitize($value) . ')?');
     }
 
-    /**
-     * Anything
-     *
-     * Accept any string
-     *
-     * @access public
-     * @return VerbalExpressions
-     */
-    public function anything()
+    public function anything(): VerbalExpressions
     {
         return $this->add('(?:.*)');
     }
 
-    /**
-     * AnythingBut
-     *
-     * Anything but this chars
-     *
-     * @access public
-     * @param  string $value The unaccepted chars
-     * @return VerbalExpressions
-     */
-    public function anythingBut($value)
+    public function anythingBut($value): VerbalExpressions
     {
         return $this->add('(?:[^' . self::sanitize($value) . ']*)');
     }
 
-    /**
-     * Something
-     *
-     * Accept any non-empty string
-     *
-     * @access public
-     * @return VerbalExpressions
-     */
-    public function something()
+    public function something(): VerbalExpressions
     {
         return $this->add('(?:.+)');
     }
 
-    /**
-     * Anything but
-     *
-     * Anything non-empty except for these chars
-     *
-     * @access public
-     * @param  string $value The unaccepted chars
-     * @return VerbalExpressions
-     */
-    public function somethingBut($value)
+    public function somethingBut($value): VerbalExpressions
     {
         return $this->add('(?:[^' . self::sanitize($value) . ']+)');
     }
 
-    /**
-     * Preg Replace
-     *
-     * Shorthand for preg_replace()
-     *
-     * @access public
-     * @param  string $source the string that will be affected(subject)
-     * @param  string $value  the replacement
-     * @return VerbalExpressions
-     */
     public function replace($source, $value)
     {
         // php doesn't have g modifier so we remove it if it's there and we remove limit param
@@ -197,114 +104,47 @@ class VerbalExpressions
         return preg_replace($this->getRegex(), $value, $source, $this->replaceLimit);
     }
 
-    /**
-     * Line break
-     *
-     * Match line break
-     *
-     * @access public
-     * @return VerbalExpressions
-     */
-    public function lineBreak()
+    public function lineBreak(): VerbalExpressions
     {
         return $this->add('(?:\\n|(\\r\\n))');
     }
 
-    /**
-     * Line break
-     *
-     * Shorthand for lineBreak
-     *
-     * @access public
-     * @return VerbalExpressions
-     */
-    public function br()
+    public function br(): VerbalExpressions
     {
         return $this->lineBreak();
     }
 
-    /**
-     * Tabs
-     *
-     * Match tabs.
-     *
-     * @access public
-     * @return VerbalExpressions
-     */
-    public function tab()
+    public function tab(): VerbalExpressions
     {
         return $this->add('\\t');
     }
 
-    /**
-     * Alpha Numeric
-     *
-     * Match any alpha numeric
-     *
-     * @access public
-     * @return VerbalExpressions
-     */
-    public function word()
+    public function word(): VerbalExpressions
     {
         return $this->add('\\w+');
     }
 
-    /**
-     * Digit
-     *
-     * Match any digit
-     *
-     * @access public
-     * @return VerbalExpressions
-     */
-    public function digit()
+    public function digit(): VerbalExpressions
     {
         return $this->add('\\d');
     }
-    
-    /**
-     * List Chars
-     *
-     * Any of the listed chars
-     *
-     * @access public
-     * @param  string $value The chars looked for
-     * @return VerbalExpressions
-     */
-    public function anyOf($value)
+
+    public function anyOf($value): VerbalExpressions
     {
         return $this->add('[' . $value . ']');
     }
 
-    /**
-     * Alias
-     *
-     * Shorthand for anyOf
-     *
-     * @access public
-     * @param  string $value The chars looked for
-     * @return VerbalExpressions
-     */
-    public function any($value)
+    public function any($value): VerbalExpressions
     {
         return $this->anyOf($value);
     }
 
-    /**
-     * Add a range
-     *
-     * Adds a range to our expression ex: range(a,z) => a-z, range(a,z,0,9) => a-z0-9
-     *
-     * @access public
-     * @return VerbalExpressions
-     * @throws \InvalidArgumentException
-     */
-    public function range()
+    public function range(): VerbalExpressions
     {
         $args = func_get_args();
         $arg_num = count($args);
 
-        if ($arg_num%2 != 0) {
+        if ($arg_num % 2 != 0) {
             throw new \InvalidArgumentException('Number of args must be even', 1);
         }
 
@@ -319,16 +159,7 @@ class VerbalExpressions
         return $this->add($value);
     }
 
-    /**
-     * Add a modifier
-     *
-     * Adds a modifier
-     *
-     * @access public
-     * @param  string $modifier
-     * @return VerbalExpressions
-     */
-    public function addModifier($modifier)
+    public function addModifier($modifier): VerbalExpressions
     {
         if (strpos($this->modifiers, $modifier) === false) {
             $this->modifiers .= $modifier;
@@ -337,74 +168,31 @@ class VerbalExpressions
         return $this;
     }
 
-    /**
-     * Remove Modifier
-     *
-     * Removes a modifier
-     *
-     * @access public
-     * @param  string $modifier
-     * @return VerbalExpressions
-     */
-    public function removeModifier($modifier)
+    public function removeModifier($modifier): VerbalExpressions
     {
         $this->modifiers = str_replace($modifier, '', $modifier);
 
         return $this;
     }
 
-    /**
-     * Case Sensitivity
-     *
-     * Match case insensitive or sensitive based on $enable value
-     *
-     * @access public
-     * @param  boolean $enable Enables or disables case sensitive. Default true
-     * @return VerbalExpressions
-     */
-    public function withAnyCase($enable = true)
+    public function withAnyCase($enable = true): VerbalExpressions
     {
         return $enable ? $this->addModifier('i') : $this->removeModifier('i');
     }
 
-    /**
-     * Stop At First
-     *
-     * Toggles g modifier
-     *
-     * @access public
-     * @param  boolean $enable Enables or disables g modifier. Default true
-     * @return VerbalExpressions
-     */
-    public function stopAtFirst($enable = true)
+
+    public function stopAtFirst($enable = true): VerbalExpressions
     {
         return $enable ? $this->addModifier('g') : $this->removeModifier('g');
     }
 
-    /**
-     * SearchOneLine
-     *
-     * Toggles m modifier
-     *
-     * @access public
-     * @param  boolean $enable Enables or disables m modifier. Default true
-     * @return VerbalExpressions
-     */
-    public function searchOneLine($enable = true)
+
+    public function searchOneLine($enable = true): VerbalExpressions
     {
         return $enable ? $this->addModifier('m') : $this->removeModifier('m');
     }
 
-    /**
-     * Multiple
-     *
-     * Adds the multiple modifier at the end of your expression
-     *
-     * @access public
-     * @param  string $value Your expression
-     * @return VerbalExpressions
-     */
-    public function multiple($value)
+    public function multiple($value): VerbalExpressions
     {
         $value = self::sanitize($value);
 
@@ -417,17 +205,8 @@ class VerbalExpressions
         return $this->add($value);
     }
 
-    /**
-     * OR
-     *
-     * Wraps the current expression in an `or` with $value
-     * Notice: OR is a reserved keyword in PHP, so this method is prefixed with "_"
-     *
-     * @access public
-     * @param  string $value new expression
-     * @return VerbalExpressions
-     */
-    public function _or($value)
+
+    public function _or($value): self
     {
         if (strpos($this->prefixes, '(') === false) {
             $this->prefixes .= '(?:';
@@ -446,42 +225,18 @@ class VerbalExpressions
         return $this;
     }
 
-    /**
-     * Object to string
-     *
-     * PHP Magic method to return a string representation of the object.
-     *
-     * @access public
-     * @return string
-     */
     public function __toString()
     {
         return $this->getRegex();
     }
 
-    /**
-     * Get the Expression
-     *
-     * Creates the final regex.
-     *
-     * @access public
-     * @return string The final regex
-     */
-    public function getRegex()
+
+    public function getRegex(): string
     {
         return '/' . $this->prefixes . $this->source . $this->suffixes . '/' . $this->modifiers;
     }
 
-    /**
-     * Test
-     *
-     * Tests the match of a string to the current regex
-     *
-     * @access public
-     * @param  string  $value The string to be tested
-     * @return boolean true if it's a match
-     */
-    public function test($value)
+    public function test($value): bool
     {
         // php doesn't have g modifier so we remove it if it's there and call preg_match_all()
         if (strpos($this->modifiers, 'g') !== false) {
@@ -490,53 +245,32 @@ class VerbalExpressions
             return preg_match_all($this->getRegex(), $value, $matches);
         }
 
-        return (bool) preg_match($this->getRegex(), $value);
+        return (bool)preg_match($this->getRegex(), $value);
     }
 
-    /**
-     * Clean
-     *
-     * Deletes the current regex for a fresh start
-     *
-     * @access public
-     * @param  array $options
-     * @return VerbalExpressions
-     */
-    public function clean(array $options = array())
+    public function clean(array $options = array()): VerbalExpressions
     {
-        $options            = array_merge(
+        $options = array_merge(
             array(
-                'prefixes'      => '',
-                'source'        => '',
-                'suffixes'      => '',
-                'modifiers'     => 'gm',
-                'replaceLimit'  => '1'
+                'prefixes' => '',
+                'source' => '',
+                'suffixes' => '',
+                'modifiers' => 'gm',
+                'replaceLimit' => '1'
             ),
             $options
         );
-        $this->prefixes     = $options['prefixes'];
-        $this->source       = $options['source'];
-        $this->suffixes     = $options['suffixes'];
-        $this->modifiers    = $options['modifiers'];    // default to global multi line matching
+        $this->prefixes = $options['prefixes'];
+        $this->source = $options['source'];
+        $this->suffixes = $options['suffixes'];
+        $this->modifiers = $options['modifiers'];    // default to global multi line matching
         $this->replaceLimit = $options['replaceLimit']; // default to global multi line matching
 
         return $this;
     }
 
-    /**
-     * Limit
-     *
-     * Adds char limit to the last added expression.
-     * If $max is less then $min the limit will be: At least $min chars {$min,}
-     * If $max is 0 the limit will be: exactly $min chars {$min}
-     * If $max bigger then $min the limit will be: at least $min but not more then $max {$min, $max}
-     *
-     * @access public
-     * @param integer $min
-     * @param integer $max
-     * @return VerbalExpressions
-     */
-    public function limit($min, $max = 0)
+
+    public function limit($min, $max = 0): VerbalExpressions
     {
         if ($max == 0) {
             $value = '{' . $min . '}';

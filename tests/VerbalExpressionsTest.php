@@ -1,8 +1,8 @@
 <?php
 
-namespace VerbalExpressions\PHPVerbalExpressions\Tests;
+namespace UWebPro\PHPVerbalExpressions\Tests;
 
-use VerbalExpressions\PHPVerbalExpressions\VerbalExpressions;
+use UWebPro\PHPVerbalExpressions\VerbalExpressions;
 use PHPUnit\Framework\TestCase;
 
 class VerbalExpressionsTest extends TestCase

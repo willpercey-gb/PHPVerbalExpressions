@@ -1,6 +1,6 @@
 <?php
 
-namespace VerbalExpressions\PHPVerbalExpressions\Entity;
+namespace UWebPro\PHPVerbalExpressions\Entity;
 
 /**
  * Expression,

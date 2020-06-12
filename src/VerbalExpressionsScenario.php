@@ -1,9 +1,9 @@
 <?php
 
-namespace VerbalExpressions\PHPVerbalExpressions;
+namespace UWebPro\PHPVerbalExpressions;
 
-use VerbalExpressions\PHPVerbalExpressions\Entity\Expression;
-use VerbalExpressions\PHPVerbalExpressions\Parser\MethodParser;
+use UWebPro\PHPVerbalExpressions\Entity\Expression;
+use UWebPro\PHPVerbalExpressions\Parser\MethodParser;
 
 /**
  * VerbalExpressionsScenario,

@@ -1,6 +1,6 @@
 <?php
 
-use VerbalExpressions\PHPVerbalExpressions\VerbalExpressionsScenario;
+use UWebPro\PHPVerbalExpressions\VerbalExpressionsScenario;
 use PHPUnit\Framework\TestCase;
 
 class VerbalExpressionsScenarioTest extends TestCase

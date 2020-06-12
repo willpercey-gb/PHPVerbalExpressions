@@ -1,10 +1,9 @@
 {
-    "name": "verbalexpressions/php-verbal-expressions",
-    "license": "MIT",
-    "type": "project",
+    "name": "uwebpro/php-verbal-expressions",
+    "type": "library",
     "description": "PHP Regular expressions made easy",
     "require": {
-        "php": ">=5.3"
+        "php": ">=7.0"
     },
     "require-dev": {
         "phpunit/phpunit": "* >=4",
@@ -13,12 +12,12 @@
     "minimum-stability": "stable",
     "autoload": {
         "psr-4": {
-            "VerbalExpressions\\PHPVerbalExpressions\\": "src/"
+            "UWebPro\\PHPVerbalExpressions\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "VerbalExpressions\\PHPVerbalExpressions\\Tests\\": "tests/"
+            "UWebPro\\PHPVerbalExpressions\\Tests\\": "tests/"
         }
     },
     "scripts": {

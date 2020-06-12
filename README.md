@@ -1,15 +1,11 @@
-[![Build Status](https://travis-ci.org/VerbalExpressions/PHPVerbalExpressions.svg)](https://travis-ci.org/VerbalExpressions/PHPVerbalExpressions)
-
 ## PHPVerbalExpressions
-- ported from [VerbalExpressions](https://github.com/VerbalExpressions/JSVerbalExpressions)
-
 VerbalExpressions is a PHP library that helps to construct hard regular expressions.  
 
 ## Installation
 The project supports Composer so you have to install [Composer](http://getcomposer.org/doc/00-intro.md#installation-nix) first, before project setup.
 
 ```sh
-$ composer require  verbalexpressions/php-verbal-expressions:dev-master
+$ composer require  uwebpro/php-verbal-expressions
 ```
 
 ## Examples
@@ -18,7 +14,7 @@ $ composer require  verbalexpressions/php-verbal-expressions:dev-master
 <?php
 // some tests
 require './vendor/autoload.php';
-use VerbalExpressions\PHPVerbalExpressions\VerbalExpressions;
+use UWebPro\PHPVerbalExpressions\VerbalExpressions;
 
 $regex = new VerbalExpressions();
 
