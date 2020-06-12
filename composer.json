@@ -2,6 +2,7 @@
     "name": "uwebpro/regex-builder",
     "type": "library",
     "description": "PHP Regular expressions made easy",
+    "license": "MIT",
     "require": {
         "php": ">=7.0"
     },
